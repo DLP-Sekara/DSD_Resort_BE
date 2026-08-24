@@ -19,15 +19,15 @@ public class GuestReview {
     private String reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id", nullable = false)
+    @JoinColumn(name = "guest_id", nullable = false, columnDefinition = "varchar(36)")
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "res_id")
+    @JoinColumn(name = "res_id", columnDefinition = "varchar(36)")
     private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", columnDefinition = "varchar(36)")
     private RestaurantOrder restaurantOrder;
 
     @Column(name = "review_text", columnDefinition = "TEXT", nullable = false)

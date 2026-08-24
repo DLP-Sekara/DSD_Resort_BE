@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BOMTemplateRepository extends JpaRepository<BOMTemplate, String> {
-    List<BOMTemplate> findByCreatedBy_User_id(String userId);
+    List<BOMTemplate> findByCreatedBy_UserId(String userId);
 }

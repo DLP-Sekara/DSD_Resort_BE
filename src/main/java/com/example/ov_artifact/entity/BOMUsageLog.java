@@ -19,11 +19,11 @@ public class BOMUsageLog {
     private String usageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
+    @JoinColumn(name = "template_id", nullable = false, columnDefinition = "varchar(36)")
     private BOMTemplate bomTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cooked_by", nullable = false)
+    @JoinColumn(name = "cooked_by", nullable = false, columnDefinition = "varchar(36)")
     private SystemUsers cookedBy;
 
     @Column(name = "usage_date")

@@ -21,7 +21,7 @@ public class Room {
     private String roomNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_id", nullable = false)
+    @JoinColumn(name = "type_id", nullable = false, columnDefinition = "varchar(36)")
     private RoomType roomType;
 
     @Enumerated(EnumType.STRING)

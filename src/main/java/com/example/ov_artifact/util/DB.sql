@@ -1,5 +1,5 @@
-
-CREATE DATABASE IF NOT EXISTS dsd_resort_db;
+DROP DATABASE IF EXISTS dsd_resort_db;
+CREATE DATABASE dsd_resort_db;
 USE dsd_resort_db;
 
 -- =========================================================

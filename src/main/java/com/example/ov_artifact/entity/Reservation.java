@@ -22,19 +22,19 @@ public class Reservation {
     private String resId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id", nullable = false)
+    @JoinColumn(name = "guest_id", nullable = false, columnDefinition = "varchar(36)")
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false, columnDefinition = "varchar(36)")
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = false, columnDefinition = "varchar(36)")
     private MealPlan mealPlan;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "handled_by")
+    @JoinColumn(name = "handled_by", columnDefinition = "varchar(36)")
     private SystemUsers handledBy;
 
     @Column(name = "check_in", nullable = false)

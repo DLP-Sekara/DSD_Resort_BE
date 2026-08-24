@@ -19,11 +19,11 @@ public class DemandForecast {
     private String forecastId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
+    @JoinColumn(name = "template_id", nullable = false, columnDefinition = "varchar(36)")
     private BOMTemplate bomTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
+    @JoinColumn(name = "created_by", nullable = false, columnDefinition = "varchar(36)")
     private SystemUsers createdBy;
 
     @Column(name = "target_date", nullable = false)

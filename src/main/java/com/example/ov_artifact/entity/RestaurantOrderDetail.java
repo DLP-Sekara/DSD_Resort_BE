@@ -17,11 +17,11 @@ public class RestaurantOrderDetail {
     private String detailId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false, columnDefinition = "varchar(36)")
     private RestaurantOrder restaurantOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false, columnDefinition = "varchar(36)")
     private FoodItem foodItem;
 
     @Column(name = "ordered_qty", nullable = false)

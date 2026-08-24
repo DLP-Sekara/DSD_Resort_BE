@@ -1,0 +1,1043 @@
+{
+	"info": {
+		"_postman_id": "dsd-resort-api-collection-v1",
+		"name": "DSD Resort API Collection",
+		"description": "Complete Postman API Collection for DSD Resort Admin Backend System organized by feature modules.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication Management",
+			"item": [
+				{
+					"name": "User Signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/signup",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "signup"]
+						}
+					}
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Check Session",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/check-session",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "check-session"]
+						}
+					}
+				},
+				{
+					"name": "Get All System Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/all-users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "all-users"]
+						}
+					}
+				},
+				{
+					"name": "User Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Guest Management",
+			"item": [
+				{
+					"name": "Add Guest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alice Smith\",\n  \"phone\": \"+94771234567\",\n  \"nic\": \"987654321V\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guests/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guests", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Guest",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"name\": \"Alice Smith Updated\",\n  \"phone\": \"+94777654321\",\n  \"nic\": \"987654321V\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guests/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guests", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get All Guests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guests/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guests", "all"]
+						}
+					}
+				},
+				{
+					"name": "Find Guest by NIC",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guests/find-by-nic/987654321V",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guests", "find-by-nic", "987654321V"]
+						}
+					}
+				},
+				{
+					"name": "Delete Guest",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guests/delete/GUEST-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guests", "delete", "GUEST-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Room Type Management",
+			"item": [
+				{
+					"name": "Add Room Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"typeName\": \"Deluxe Villa\",\n  \"pricePerNight\": 15000.00,\n  \"maxOccupancy\": 3\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/room-types/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "room-types", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Room Type",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"typeId\": \"TYPE-UUID\",\n  \"typeName\": \"Luxury Suite\",\n  \"pricePerNight\": 25000.00,\n  \"maxOccupancy\": 4\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/room-types/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "room-types", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get All Room Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/room-types/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "room-types", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Room Type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/room-types/delete/TYPE-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "room-types", "delete", "TYPE-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Room Management",
+			"item": [
+				{
+					"name": "Add Room",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"roomNumber\": \"R-101\",\n  \"typeId\": \"TYPE-UUID\",\n  \"status\": \"AVAILABLE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/rooms/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "rooms", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Room",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"roomId\": \"ROOM-UUID\",\n  \"roomNumber\": \"R-101\",\n  \"typeId\": \"TYPE-UUID\",\n  \"status\": \"MAINTENANCE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/rooms/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "rooms", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get All Rooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/rooms/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "rooms", "all"]
+						}
+					}
+				},
+				{
+					"name": "Get Room by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/rooms/get-by-id/ROOM-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "rooms", "get-by-id", "ROOM-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Delete Room",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/rooms/delete/ROOM-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "rooms", "delete", "ROOM-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Meal Plan Management",
+			"item": [
+				{
+					"name": "Add Meal Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Full Board\",\n  \"price\": 4500.00,\n  \"planCode\": \"FB-01\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/meal-plans/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "meal-plans", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Meal Plan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"planId\": \"PLAN-UUID\",\n  \"name\": \"Half Board\",\n  \"price\": 3000.00,\n  \"planCode\": \"HB-01\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/meal-plans/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "meal-plans", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get All Meal Plans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/meal-plans/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "meal-plans", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Meal Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/meal-plans/delete/PLAN-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "meal-plans", "delete", "PLAN-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Food Item Management",
+			"item": [
+				{
+					"name": "Add Food Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Seafood Fried Rice\",\n  \"unitPrice\": 1850.00,\n  \"quantityOnHand\": 50\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/food-items/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "food-items", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Food Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"itemId\": \"ITEM-UUID\",\n  \"name\": \"Seafood Fried Rice Large\",\n  \"unitPrice\": 2200.00,\n  \"quantityOnHand\": 40\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/food-items/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "food-items", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get All Food Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/food-items/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "food-items", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Food Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/food-items/delete/ITEM-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "food-items", "delete", "ITEM-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Raw Material Management",
+			"item": [
+				{
+					"name": "Add Raw Material",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"materialName\": \"Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 100.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/raw-materials/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "raw-materials", "add"]
+						}
+					}
+				},
+				{
+					"name": "Update Raw Material",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"materialId\": \"MATERIAL-UUID\",\n  \"materialName\": \"Premium Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 150.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/raw-materials/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "raw-materials", "update"]
+						}
+					}
+				},
+				{
+					"name": "Get Raw Material by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/raw-materials/MATERIAL-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "raw-materials", "MATERIAL-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get All Raw Materials",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/raw-materials/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "raw-materials", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Raw Material",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/raw-materials/delete/MATERIAL-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "raw-materials", "delete", "MATERIAL-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. BOM Template Management",
+			"item": [
+				{
+					"name": "Create BOM Template",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"templateName\": \"Chicken Biryani BOM\",\n  \"createdBy\": \"USER-UUID\",\n  \"items\": [\n    {\n      \"materialId\": \"MATERIAL-UUID-1\",\n      \"qtyPerPerson\": 0.250\n    },\n    {\n      \"materialId\": \"MATERIAL-UUID-2\",\n      \"qtyPerPerson\": 0.300\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "create"]
+						}
+					}
+				},
+				{
+					"name": "Get BOM Template by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/TEMPLATE-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "TEMPLATE-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get All BOM Templates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete BOM Template",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/delete/TEMPLATE-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "delete", "TEMPLATE-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Reservation Management",
+			"item": [
+				{
+					"name": "Create Reservation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"roomId\": \"ROOM-UUID\",\n  \"planId\": \"PLAN-UUID\",\n  \"handledBy\": \"USER-UUID\",\n  \"checkIn\": \"2026-09-01\",\n  \"checkOut\": \"2026-09-05\",\n  \"guestCount\": 2,\n  \"reservationDetails\": [\n    {\n      \"itemId\": \"FOOD-ITEM-UUID\",\n      \"orderedQty\": 3\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "create"]
+						}
+					}
+				},
+				{
+					"name": "Get Available Rooms for Booking",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/available-rooms?typeId=TYPE-UUID&checkIn=2026-09-01&checkOut=2026-09-05",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "available-rooms"],
+							"query": [
+								{ "key": "typeId", "value": "TYPE-UUID" },
+								{ "key": "checkIn", "value": "2026-09-01" },
+								{ "key": "checkOut", "value": "2026-09-05" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Reservations (Filtered & Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/all?page=0&size=10&status=CONFIRMED",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "all"],
+							"query": [
+								{ "key": "page", "value": "0" },
+								{ "key": "size", "value": "10" },
+								{ "key": "status", "value": "CONFIRMED" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Reservation by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/RES-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "RES-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Checkout Guest",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/checkout/RES-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "checkout", "RES-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get Income Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/income-stats?year=2026&month=9",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "income-stats"],
+							"query": [
+								{ "key": "year", "value": "2026" },
+								{ "key": "month", "value": "9" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Reservation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/reservations/delete/RES-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "reservations", "delete", "RES-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "10. Restaurant Order Management",
+			"item": [
+				{
+					"name": "Create Restaurant Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"handledBy\": \"USER-UUID\",\n  \"status\": \"PENDING\",\n  \"orderDetails\": [\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-1\",\n      \"orderedQty\": 2\n    },\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-2\",\n      \"orderedQty\": 1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "restaurant-orders", "create"]
+						}
+					}
+				},
+				{
+					"name": "Get Restaurant Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/ORDER-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "restaurant-orders", "ORDER-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get All Restaurant Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "restaurant-orders", "all"]
+						}
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/update-status/ORDER-UUID?status=COMPLETED",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "restaurant-orders", "update-status", "ORDER-UUID"],
+							"query": [
+								{ "key": "status", "value": "COMPLETED" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Restaurant Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/delete/ORDER-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "restaurant-orders", "delete", "ORDER-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "11. Demand Forecast Management",
+			"item": [
+				{
+					"name": "Add Demand Forecast",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"templateId\": \"TEMPLATE-UUID\",\n  \"createdBy\": \"USER-UUID\",\n  \"targetDate\": \"2026-09-10\",\n  \"predictedGuests\": 120,\n  \"weatherFeature\": \"Sunny\",\n  \"isHoliday\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "add"]
+						}
+					}
+				},
+				{
+					"name": "Get Forecast by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/FORECAST-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "FORECAST-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get Forecasts by Target Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/by-date?date=2026-09-10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "by-date"],
+							"query": [
+								{ "key": "date", "value": "2026-09-10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Demand Forecasts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Demand Forecast",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/delete/FORECAST-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "delete", "FORECAST-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "12. BOM Usage Log Management",
+			"item": [
+				{
+					"name": "Log Kitchen BOM Usage",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"templateId\": \"TEMPLATE-UUID\",\n  \"cookedBy\": \"USER-UUID\",\n  \"portionsCooked\": 50\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-usage-logs/log",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-usage-logs", "log"]
+						}
+					}
+				},
+				{
+					"name": "Get Usage Log by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-usage-logs/USAGE-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-usage-logs", "USAGE-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get Usage Logs by Template ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-usage-logs/by-template/TEMPLATE-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-usage-logs", "by-template", "TEMPLATE-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get All BOM Usage Logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-usage-logs/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-usage-logs", "all"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "13. Guest Review Management",
+			"item": [
+				{
+					"name": "Add Guest Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"resId\": \"RES-UUID\",\n  \"orderId\": null,\n  \"reviewText\": \"Amazing stay and hospitality! The resort view was breathtaking.\",\n  \"nlpScore\": 4.85,\n  \"sentimentLabel\": \"POSITIVE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guest-reviews/add",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guest-reviews", "add"]
+						}
+					}
+				},
+				{
+					"name": "Get Review by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guest-reviews/REVIEW-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guest-reviews", "REVIEW-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get Reviews by Guest ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guest-reviews/by-guest/GUEST-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guest-reviews", "by-guest", "GUEST-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get All Guest Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guest-reviews/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guest-reviews", "all"]
+						}
+					}
+				},
+				{
+					"name": "Delete Guest Review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/guest-reviews/delete/REVIEW-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "guest-reviews", "delete", "REVIEW-UUID"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "14. Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

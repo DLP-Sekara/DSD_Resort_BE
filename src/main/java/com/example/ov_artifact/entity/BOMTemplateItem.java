@@ -19,11 +19,11 @@ public class BOMTemplateItem {
     private String templateItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
+    @JoinColumn(name = "template_id", nullable = false, columnDefinition = "varchar(36)")
     private BOMTemplate bomTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", nullable = false)
+    @JoinColumn(name = "material_id", nullable = false, columnDefinition = "varchar(36)")
     private RawMaterial rawMaterial;
 
     @Column(name = "qty_per_person", precision = 10, scale = 4, nullable = false)

@@ -14,7 +14,7 @@ public class SystemUsers {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", length = 36, nullable = false, updatable = false)
-    private String user_id;
+    private String userId;
 
     @Column(unique = true, nullable = false)
     private String name;

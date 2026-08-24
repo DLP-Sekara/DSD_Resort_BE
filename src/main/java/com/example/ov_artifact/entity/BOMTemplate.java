@@ -20,6 +20,6 @@ public class BOMTemplate {
     private String templateName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
+    @JoinColumn(name = "created_by", nullable = false, columnDefinition = "varchar(36)")
     private SystemUsers createdBy;
 }

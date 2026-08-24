@@ -51,7 +51,7 @@ public class AuthServiceTest {
         authDTO.setRole("ADMIN");
 
         user = new SystemUsers();
-        user.setUser_id("uuid-1234");
+        user.setUserId("uuid-1234");
         user.setName("Saman Kumara");
         user.setEmail("saman@gmail.com");
         user.setPassword("encodedPassword");
