@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ReservationDetail")
+@Table(name = "RestaurantOrderDetail")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationDetail {
+public class RestaurantOrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "detail_id", length = 36, nullable = false, updatable = false)
     private String detailId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "res_id", nullable = false)
-    private Reservation reservation;
+    @JoinColumn(name = "order_id", nullable = false)
+    private RestaurantOrder restaurantOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)

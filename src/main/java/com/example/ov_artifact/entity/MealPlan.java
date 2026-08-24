@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import com.example.ov_artifact.util.MealStatus;
 
 @Entity
-@Table(name = "meal_plans")
+@Table(name = "MealPlan")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

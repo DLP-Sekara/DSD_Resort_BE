@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "reservations")
+@Table(name = "Reservation")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +32,10 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id", nullable = false)
     private MealPlan mealPlan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "handled_by")
+    private SystemUsers handledBy;
 
     @Column(name = "check_in", nullable = false)
     private LocalDate checkIn;

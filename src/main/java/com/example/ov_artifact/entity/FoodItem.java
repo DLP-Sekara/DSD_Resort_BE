@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "food_items")
+@Table(name = "FoodItem")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
