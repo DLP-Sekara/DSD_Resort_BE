@@ -17,6 +17,7 @@ public class ReservationDTO {
     private String guestId;
     private String roomId;
     private String planId;
+    private String handledBy;
     private LocalDate checkIn;
     private LocalDate checkOut;
     private BigDecimal totalBill;
