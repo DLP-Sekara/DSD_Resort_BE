@@ -1,0 +1,52 @@
+package com.example.ov_artifact.controller;
+
+import com.example.ov_artifact.dto.BOMTemplateDTO;
+import com.example.ov_artifact.services.BOMTemplateService;
+import com.example.ov_artifact.util.StandardResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin
+@RequestMapping("/api/v1/bom-templates")
+@RequiredArgsConstructor
+public class BOMTemplateController {
+
+    private final BOMTemplateService bomTemplateService;
+
+    @PostMapping("/create")
+    public ResponseEntity<StandardResponse> createTemplate(@RequestBody BOMTemplateDTO bomTemplateDTO) {
+        BOMTemplateDTO createdTemplate = bomTemplateService.createTemplate(bomTemplateDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 201, "BOM Template Created Successfully", createdTemplate),
+                HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StandardResponse> getTemplateById(@PathVariable String id) {
+        BOMTemplateDTO template = bomTemplateService.getTemplateById(id);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Template Fetched Successfully", template),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<StandardResponse> getAllTemplates() {
+        List<BOMTemplateDTO> templates = bomTemplateService.getAllTemplates();
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Templates Fetched Successfully", templates),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<StandardResponse> deleteTemplate(@PathVariable String id) {
+        bomTemplateService.deleteTemplate(id);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Template Deleted Successfully", null),
+                HttpStatus.OK);
+    }
+}
