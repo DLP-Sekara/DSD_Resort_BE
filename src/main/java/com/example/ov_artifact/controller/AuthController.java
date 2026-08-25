@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ov_artifact.dto.AuthDTO;
+import com.example.ov_artifact.dto.ResetPasswordRequestDTO;
+import com.example.ov_artifact.dto.SendOtpRequestDTO;
+import com.example.ov_artifact.dto.VerifyOtpRequestDTO;
 import com.example.ov_artifact.services.AuthService;
 import com.example.ov_artifact.util.StandardResponse;
 
@@ -86,6 +89,30 @@ public class AuthController {
 
         return new ResponseEntity<>(
                 new StandardResponse(true, 200, "All System Users Fetched Successfully", allUsers),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password/send-otp")
+    public ResponseEntity<StandardResponse> sendForgotPasswordOtp(@RequestBody SendOtpRequestDTO requestDTO) {
+        authService.sendForgotPasswordOtp(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "OTP sent successfully to your email", null),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password/verify-otp")
+    public ResponseEntity<StandardResponse> verifyForgotPasswordOtp(@RequestBody VerifyOtpRequestDTO requestDTO) {
+        authService.verifyForgotPasswordOtp(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "OTP verified successfully", null),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password/reset-password")
+    public ResponseEntity<StandardResponse> resetPassword(@RequestBody ResetPasswordRequestDTO requestDTO) {
+        authService.resetPassword(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "Password reset successfully. You can now log in with your new password.", null),
                 HttpStatus.OK);
     }
 

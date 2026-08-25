@@ -9,10 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ov_artifact.dto.AuthDTO;
+import com.example.ov_artifact.dto.ResetPasswordRequestDTO;
+import com.example.ov_artifact.dto.SendOtpRequestDTO;
+import com.example.ov_artifact.dto.VerifyOtpRequestDTO;
 import com.example.ov_artifact.entity.SystemUsers;
 import com.example.ov_artifact.repository.AuthRepo;
 import com.example.ov_artifact.util.JwtUtil;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +28,8 @@ public class AuthService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final OtpService otpService;
+    private final EmailService emailService;
 
     public void registerUser(AuthDTO authDTO) {
         if (authRepo.findByName(authDTO.getName()).isPresent()) {
@@ -69,10 +75,59 @@ public class AuthService {
             dto.setEmail(user.getEmail());
             dto.setRole(user.getRole());
 
-            // Password එක null කරන්න (Security purposes)
             dto.setPassword(null);
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public void sendForgotPasswordOtp(SendOtpRequestDTO requestDTO) {
+        if (requestDTO.getEmail() == null || requestDTO.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required!");
+        }
+
+        SystemUsers user = authRepo.findByEmail(requestDTO.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with registered email: " + requestDTO.getEmail()));
+
+        String otp = otpService.generateAndStoreOtp(user.getEmail());
+        emailService.sendOtpEmail(user.getEmail(), otp);
+    }
+
+    public void verifyForgotPasswordOtp(VerifyOtpRequestDTO requestDTO) {
+        if (requestDTO.getEmail() == null || requestDTO.getOtp() == null) {
+            throw new IllegalArgumentException("Email and OTP are required!");
+        }
+
+        if (!authRepo.existsByEmail(requestDTO.getEmail())) {
+            throw new EntityNotFoundException("User not found with registered email: " + requestDTO.getEmail());
+        }
+
+        otpService.verifyOtp(requestDTO.getEmail(), requestDTO.getOtp());
+    }
+
+    public void resetPassword(ResetPasswordRequestDTO requestDTO) {
+        if (requestDTO.getEmail() == null || requestDTO.getNewPassword() == null || requestDTO.getConfirmPassword() == null) {
+            throw new IllegalArgumentException("Email, new password, and confirm password are required!");
+        }
+
+        if (!requestDTO.getNewPassword().equals(requestDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("New password and confirm password do not match!");
+        }
+
+        if (requestDTO.getNewPassword().length() < 6) {
+            throw new IllegalArgumentException("Password must be at least 6 characters long!");
+        }
+
+        if (!otpService.isOtpVerified(requestDTO.getEmail())) {
+            throw new IllegalArgumentException("OTP has not been verified for this email. Please verify OTP first.");
+        }
+
+        SystemUsers user = authRepo.findByEmail(requestDTO.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with registered email: " + requestDTO.getEmail()));
+
+        user.setPassword(passwordEncoder.encode(requestDTO.getNewPassword()));
+        authRepo.save(user);
+
+        otpService.clearOtp(requestDTO.getEmail());
     }
 
 }
