@@ -831,7 +831,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"handledBy\": \"USER-UUID\",\n  \"status\": \"PENDING\",\n  \"orderDetails\": [\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-1\",\n      \"orderedQty\": 2\n    },\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-2\",\n      \"orderedQty\": 1\n    }\n  ]\n}"
+							"raw": "{\n  \"handledBy\": \"USER-UUID\",\n  \"status\": \"PENDING\",\n  \"orderDetails\": [\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-1\",\n      \"orderedQty\": 2\n    },\n    {\n      \"itemId\": \"FOOD-ITEM-UUID-2\",\n      \"orderedQty\": 1\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/restaurant-orders/create",

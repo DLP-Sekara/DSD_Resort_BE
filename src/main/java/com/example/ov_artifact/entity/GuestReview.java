@@ -19,7 +19,7 @@ public class GuestReview {
     private String reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id", nullable = false, columnDefinition = "varchar(36)")
+    @JoinColumn(name = "guest_id", columnDefinition = "varchar(36)")
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,4 +38,6 @@ public class GuestReview {
 
     @Column(name = "sentiment_label", length = 20)
     private String sentimentLabel;
+
+    private String reviewerName;
 }

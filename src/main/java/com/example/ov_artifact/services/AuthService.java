@@ -72,10 +72,10 @@ public class AuthService {
         return users.stream().map(user -> {
             AuthDTO dto = new AuthDTO();
 
+            dto.setUserId(user.getUserId());
             dto.setName(user.getName());
             dto.setEmail(user.getEmail());
             dto.setRole(user.getRole());
-
             dto.setPassword(null);
             return dto;
         }).collect(Collectors.toList());

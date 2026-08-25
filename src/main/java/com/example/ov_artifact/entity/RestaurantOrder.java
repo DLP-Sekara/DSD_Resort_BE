@@ -20,7 +20,7 @@ public class RestaurantOrder {
     private String orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id", nullable = false, columnDefinition = "varchar(36)")
+    @JoinColumn(name = "guest_id", columnDefinition = "varchar(36)")
     private Guest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)

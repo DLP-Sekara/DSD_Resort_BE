@@ -92,7 +92,7 @@ CREATE TABLE Reservation (
 
 CREATE TABLE RestaurantOrder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    guest_id INT NOT NULL,
+    guest_id INT NULL,
     handled_by INT NOT NULL,
     order_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     total_amount DECIMAL(10, 2) DEFAULT 0.00,
@@ -156,7 +156,8 @@ CREATE TABLE RestaurantOrderDetail (
 
 CREATE TABLE GuestReview (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
-    guest_id INT NOT NULL,
+    guest_id INT NULL,
+    reviewer_name VARCHAR(100) NULL,
     res_id INT NULL,      -- Can be NULL if review is only for a restaurant order
     order_id INT NULL,    -- Can be NULL if review is only for a room reservation
     review_text TEXT NOT NULL,

@@ -10,6 +10,7 @@ import lombok.ToString;
 @Data 
 @ToString 
 public class AuthDTO {
+    private String userId;
     private String name;
     private String password;
     private String email;

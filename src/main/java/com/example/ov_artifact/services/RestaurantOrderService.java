@@ -15,8 +15,6 @@ import com.example.ov_artifact.repository.RestaurantOrderRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,11 +32,13 @@ public class RestaurantOrderService {
     private final GuestRepository guestRepository;
     private final AuthRepo authRepo;
     private final FoodItemRepository foodItemRepository;
-    private final ModelMapper modelMapper;
+
 
     public RestaurantOrderDTO createOrder(RestaurantOrderDTO dto) {
-        Guest guest = guestRepository.findById(dto.getGuestId())
-                .orElseThrow(() -> new RuntimeException("Guest not found with ID: " + dto.getGuestId()));
+        Guest guest = null;
+        if (dto.getGuestId() != null && !dto.getGuestId().trim().isEmpty()) {
+            guest = guestRepository.findById(dto.getGuestId()).orElse(null);
+        }
 
         SystemUsers handledBy = authRepo.findById(dto.getHandledBy())
                 .orElseThrow(() -> new RuntimeException("SystemUser not found with ID: " + dto.getHandledBy()));
@@ -78,9 +78,26 @@ public class RestaurantOrderService {
         RestaurantOrder order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Restaurant Order not found with ID: " + orderId));
 
-        RestaurantOrderDTO dto = modelMapper.map(order, RestaurantOrderDTO.class);
+        RestaurantOrderDTO dto = new RestaurantOrderDTO();
+        dto.setOrderId(order.getOrderId());
+        dto.setGuestId(order.getGuest() != null ? order.getGuest().getGuestId() : null);
+        dto.setHandledBy(order.getHandledBy() != null ? order.getHandledBy().getUserId() : null);
+        dto.setOrderTime(order.getOrderTime());
+        dto.setTotalAmount(order.getTotalAmount());
+        dto.setStatus(order.getStatus());
+
         List<RestaurantOrderDetail> details = orderDetailRepository.findByRestaurantOrder_OrderId(orderId);
-        dto.setOrderDetails(modelMapper.map(details, new TypeToken<List<RestaurantOrderDetailDTO>>() {}.getType()));
+        List<RestaurantOrderDetailDTO> detailDTOs = new ArrayList<>();
+        if (details != null) {
+            for (RestaurantOrderDetail d : details) {
+                RestaurantOrderDetailDTO dDto = new RestaurantOrderDetailDTO();
+                dDto.setOrderId(order.getOrderId());
+                dDto.setItemId(d.getFoodItem() != null ? d.getFoodItem().getItemId() : null);
+                dDto.setOrderedQty(d.getOrderedQty());
+                detailDTOs.add(dDto);
+            }
+        }
+        dto.setOrderDetails(detailDTOs);
 
         return dto;
     }
