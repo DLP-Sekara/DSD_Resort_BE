@@ -14,4 +14,5 @@ public class RawMaterialDTO {
     private String materialName;
     private String unitOfMeasure;
     private BigDecimal quantityOnHand;
+    private String category;
 }

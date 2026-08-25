@@ -26,4 +26,7 @@ public class FoodItem {
 
     @Column(name = "quantity_on_hand", nullable = false)
     private Integer quantityOnHand;
+
+    @Column(name = "is_kitchen_prepared", nullable = false)
+    private Boolean isKitchenPrepared = true;
 }

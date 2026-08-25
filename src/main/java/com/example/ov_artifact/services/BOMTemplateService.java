@@ -4,11 +4,13 @@ import com.example.ov_artifact.dto.BOMTemplateDTO;
 import com.example.ov_artifact.dto.BOMTemplateItemDTO;
 import com.example.ov_artifact.entity.BOMTemplate;
 import com.example.ov_artifact.entity.BOMTemplateItem;
+import com.example.ov_artifact.entity.FoodItem;
 import com.example.ov_artifact.entity.RawMaterial;
 import com.example.ov_artifact.entity.SystemUsers;
 import com.example.ov_artifact.repository.AuthRepo;
 import com.example.ov_artifact.repository.BOMTemplateItemRepository;
 import com.example.ov_artifact.repository.BOMTemplateRepository;
+import com.example.ov_artifact.repository.FoodItemRepository;
 import com.example.ov_artifact.repository.RawMaterialRepository;
 
 import jakarta.transaction.Transactional;
@@ -29,15 +31,23 @@ public class BOMTemplateService {
     private final BOMTemplateItemRepository bomTemplateItemRepository;
     private final AuthRepo authRepo;
     private final RawMaterialRepository rawMaterialRepository;
+    private final FoodItemRepository foodItemRepository;
     private final ModelMapper modelMapper;
 
     public BOMTemplateDTO createTemplate(BOMTemplateDTO dto) {
         SystemUsers user = authRepo.findById(dto.getCreatedBy())
                 .orElseThrow(() -> new RuntimeException("SystemUser not found with ID: " + dto.getCreatedBy()));
 
+        FoodItem foodItem = null;
+        if (dto.getItemId() != null && !dto.getItemId().trim().isEmpty()) {
+            foodItem = foodItemRepository.findById(dto.getItemId())
+                    .orElseThrow(() -> new RuntimeException("Food Item not found with ID: " + dto.getItemId()));
+        }
+
         BOMTemplate template = new BOMTemplate();
         template.setTemplateName(dto.getTemplateName());
         template.setCreatedBy(user);
+        template.setFoodItem(foodItem);
 
         BOMTemplate savedTemplate = bomTemplateRepository.save(template);
 
@@ -61,7 +71,12 @@ public class BOMTemplateService {
         BOMTemplate template = bomTemplateRepository.findById(templateId)
                 .orElseThrow(() -> new RuntimeException("BOMTemplate not found with ID: " + templateId));
 
-        BOMTemplateDTO dto = modelMapper.map(template, BOMTemplateDTO.class);
+        BOMTemplateDTO dto = new BOMTemplateDTO();
+        dto.setTemplateId(template.getTemplateId());
+        dto.setTemplateName(template.getTemplateName());
+        dto.setCreatedBy(template.getCreatedBy() != null ? template.getCreatedBy().getUserId() : null);
+        dto.setItemId(template.getFoodItem() != null ? template.getFoodItem().getItemId() : null);
+
         List<BOMTemplateItem> items = bomTemplateItemRepository.findByBomTemplate_TemplateId(templateId);
         dto.setItems(modelMapper.map(items, new TypeToken<List<BOMTemplateItemDTO>>() {}.getType()));
 

@@ -14,4 +14,5 @@ public class FoodItemDTO {
     private String name;
     private BigDecimal unitPrice;
     private Integer quantityOnHand;
+    private Boolean isKitchenPrepared;
 }

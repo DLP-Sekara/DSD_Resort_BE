@@ -26,4 +26,7 @@ public class RawMaterial {
 
     @Column(name = "quantity_on_hand", precision = 10, scale = 2)
     private BigDecimal quantityOnHand;
+
+    @Column(name = "category", length = 50)
+    private String category;
 }

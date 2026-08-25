@@ -24,12 +24,18 @@ public class FoodItemService {
             throw new IllegalArgumentException("Food Item name " + foodItemDTO.getName() + "' already exists!");
         }
         FoodItem foodItem = modelMapper.map(foodItemDTO, FoodItem.class);
+        if (foodItem.getIsKitchenPrepared() == null) {
+            foodItem.setIsKitchenPrepared(true);
+        }
         foodItemRepository.save(foodItem);
     }
 
     public void updateFoodItem(FoodItemDTO foodItemDTO) {
         if (foodItemRepository.existsById(foodItemDTO.getItemId())) {
             FoodItem foodItem = modelMapper.map(foodItemDTO, FoodItem.class);
+            if (foodItem.getIsKitchenPrepared() == null) {
+                foodItem.setIsKitchenPrepared(true);
+            }
             foodItemRepository.save(foodItem);
         } else {
             throw new RuntimeException("Food Item not found for ID: " + foodItemDTO.getItemId());

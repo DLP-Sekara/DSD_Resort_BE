@@ -503,7 +503,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Seafood Fried Rice\",\n  \"unitPrice\": 1850.00,\n  \"quantityOnHand\": 50\n}"
+							"raw": "{\n  \"name\": \"Seafood Fried Rice\",\n  \"unitPrice\": 1850.00,\n  \"quantityOnHand\": 50,\n  \"isKitchenPrepared\": true\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/food-items/add",
@@ -524,7 +524,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"itemId\": \"ITEM-UUID\",\n  \"name\": \"Seafood Fried Rice Large\",\n  \"unitPrice\": 2200.00,\n  \"quantityOnHand\": 40\n}"
+							"raw": "{\n  \"itemId\": \"ITEM-UUID\",\n  \"name\": \"Seafood Fried Rice Large\",\n  \"unitPrice\": 2200.00,\n  \"quantityOnHand\": 40,\n  \"isKitchenPrepared\": true\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/food-items/update",
@@ -574,7 +574,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"materialName\": \"Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 100.00\n}"
+							"raw": "{\n  \"materialName\": \"Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 100.00,\n  \"category\": \"GRAINS\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/raw-materials/add",
@@ -595,7 +595,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"materialId\": \"MATERIAL-UUID\",\n  \"materialName\": \"Premium Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 150.00\n}"
+							"raw": "{\n  \"materialId\": \"MATERIAL-UUID\",\n  \"materialName\": \"Premium Basmati Rice\",\n  \"unitOfMeasure\": \"kg\",\n  \"quantityOnHand\": 150.00,\n  \"category\": \"GRAINS\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/raw-materials/update",
@@ -657,7 +657,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"templateName\": \"Chicken Biryani BOM\",\n  \"createdBy\": \"USER-UUID\",\n  \"items\": [\n    {\n      \"materialId\": \"MATERIAL-UUID-1\",\n      \"qtyPerPerson\": 0.250\n    },\n    {\n      \"materialId\": \"MATERIAL-UUID-2\",\n      \"qtyPerPerson\": 0.300\n    }\n  ]\n}"
+							"raw": "{\n  \"templateName\": \"Chicken Biryani BOM\",\n  \"createdBy\": \"USER-UUID\",\n  \"itemId\": \"FOOD-ITEM-UUID\",\n  \"items\": [\n    {\n      \"materialId\": \"MATERIAL-UUID-1\",\n      \"qtyPerPerson\": 0.250\n    },\n    {\n      \"materialId\": \"MATERIAL-UUID-2\",\n      \"qtyPerPerson\": 0.300\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/bom-templates/create",

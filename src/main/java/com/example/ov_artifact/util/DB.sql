@@ -40,14 +40,16 @@ CREATE TABLE FoodItem (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
-    quantity_on_hand INT DEFAULT 0
+    quantity_on_hand INT DEFAULT 0,
+    is_kitchen_prepared BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE RawMaterial (
     material_id INT AUTO_INCREMENT PRIMARY KEY,
     material_name VARCHAR(100) NOT NULL,
     unit_of_measure VARCHAR(20) NOT NULL,
-    quantity_on_hand DECIMAL(10, 2) DEFAULT 0.00
+    quantity_on_hand DECIMAL(10, 2) DEFAULT 0.00,
+    category VARCHAR(50) NULL
 );
 
 -- =========================================================
@@ -66,7 +68,9 @@ CREATE TABLE BOMTemplate (
     template_id INT AUTO_INCREMENT PRIMARY KEY,
     template_name VARCHAR(100) NOT NULL,
     created_by INT NOT NULL,
-    FOREIGN KEY (created_by) REFERENCES SystemUser(user_id)
+    item_id INT NULL UNIQUE,
+    FOREIGN KEY (created_by) REFERENCES SystemUser(user_id),
+    FOREIGN KEY (item_id) REFERENCES FoodItem(item_id)
 );
 
 -- =========================================================

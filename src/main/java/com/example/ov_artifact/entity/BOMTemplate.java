@@ -22,4 +22,8 @@ public class BOMTemplate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, columnDefinition = "varchar(36)")
     private SystemUsers createdBy;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", unique = true, columnDefinition = "varchar(36)")
+    private FoodItem foodItem;
 }
