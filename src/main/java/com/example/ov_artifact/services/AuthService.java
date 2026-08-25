@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ov_artifact.dto.AuthDTO;
+import com.example.ov_artifact.dto.ChangePasswordRequestDTO;
 import com.example.ov_artifact.dto.ResetPasswordRequestDTO;
 import com.example.ov_artifact.dto.SendOtpRequestDTO;
 import com.example.ov_artifact.dto.VerifyOtpRequestDTO;
@@ -128,6 +129,34 @@ public class AuthService {
         authRepo.save(user);
 
         otpService.clearOtp(requestDTO.getEmail());
+    }
+
+    public void changePassword(String email, ChangePasswordRequestDTO requestDTO) {
+        if (requestDTO.getCurrentPassword() == null || requestDTO.getNewPassword() == null || requestDTO.getConfirmPassword() == null) {
+            throw new IllegalArgumentException("Current password, new password, and confirm password are required!");
+        }
+
+        if (!requestDTO.getNewPassword().equals(requestDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("New password and confirm password do not match!");
+        }
+
+        if (requestDTO.getNewPassword().length() < 6) {
+            throw new IllegalArgumentException("New password must be at least 6 characters long!");
+        }
+
+        SystemUsers user = authRepo.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+
+        if (!passwordEncoder.matches(requestDTO.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect!");
+        }
+
+        if (passwordEncoder.matches(requestDTO.getNewPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("New password must be different from current password!");
+        }
+
+        user.setPassword(passwordEncoder.encode(requestDTO.getNewPassword()));
+        authRepo.save(user);
     }
 
 }

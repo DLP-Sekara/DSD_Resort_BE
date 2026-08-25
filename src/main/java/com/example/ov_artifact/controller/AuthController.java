@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ov_artifact.dto.AuthDTO;
+import com.example.ov_artifact.dto.ChangePasswordRequestDTO;
 import com.example.ov_artifact.dto.ResetPasswordRequestDTO;
 import com.example.ov_artifact.dto.SendOtpRequestDTO;
 import com.example.ov_artifact.dto.VerifyOtpRequestDTO;
@@ -113,6 +114,18 @@ public class AuthController {
         authService.resetPassword(requestDTO);
         return new ResponseEntity<>(
                 new StandardResponse(true, 200, "Password reset successfully. You can now log in with your new password.", null),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<StandardResponse> changePassword(@RequestBody ChangePasswordRequestDTO requestDTO) {
+        String email = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getName();
+
+        authService.changePassword(email, requestDTO);
+
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "Password updated successfully!", null),
                 HttpStatus.OK);
     }
 
