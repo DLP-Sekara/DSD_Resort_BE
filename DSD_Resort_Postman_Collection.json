@@ -858,9 +858,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/restaurant-orders/all",
+							"raw": "{{baseUrl}}/api/v1/restaurant-orders/all?isKitchenPrepared=true",
 							"host": ["{{baseUrl}}"],
-							"path": ["api", "v1", "restaurant-orders", "all"]
+							"path": ["api", "v1", "restaurant-orders", "all"],
+							"query": [
+								{ "key": "isKitchenPrepared", "value": "true" }
+							]
 						}
 					}
 				},

@@ -35,8 +35,11 @@ public class RestaurantOrderController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<StandardResponse> getAllOrders() {
-        List<RestaurantOrderDTO> orders = restaurantOrderService.getAllOrders();
+    public ResponseEntity<StandardResponse> getAllOrders(
+            @RequestParam(required = false) Boolean isKitchenPrepared,
+            @RequestParam(value = "is_kitchen_prepared", required = false) Boolean isKitchenPreparedSnake) {
+        Boolean filterParam = isKitchenPrepared != null ? isKitchenPrepared : isKitchenPreparedSnake;
+        List<RestaurantOrderDTO> orders = restaurantOrderService.getAllOrders(filterParam);
         return new ResponseEntity<>(
                 new StandardResponse(true, 200, "Restaurant Orders Fetched Successfully", orders),
                 HttpStatus.OK);

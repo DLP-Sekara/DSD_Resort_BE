@@ -102,13 +102,22 @@ public class RestaurantOrderService {
         return dto;
     }
 
-    public List<RestaurantOrderDTO> getAllOrders() {
-        List<RestaurantOrder> orders = orderRepository.findAll();
+    public List<RestaurantOrderDTO> getAllOrders(Boolean isKitchenPrepared) {
+        List<RestaurantOrder> orders;
+        if (isKitchenPrepared != null) {
+            orders = orderRepository.findOrdersByKitchenPrepared(isKitchenPrepared);
+        } else {
+            orders = orderRepository.findAll();
+        }
         List<RestaurantOrderDTO> dtos = new ArrayList<>();
         for (RestaurantOrder o : orders) {
             dtos.add(getOrderById(o.getOrderId()));
         }
         return dtos;
+    }
+
+    public List<RestaurantOrderDTO> getAllOrders() {
+        return getAllOrders(null);
     }
 
     public void updateOrderStatus(String orderId, String status) {
