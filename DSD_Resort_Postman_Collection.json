@@ -1043,7 +1043,7 @@
 			"name": "12. BOM Usage Log Management",
 			"item": [
 				{
-					"name": "Log Kitchen BOM Usage",
+					"name": "Log Kitchen BOM Usage (Batch)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1054,7 +1054,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"templateId\": \"TEMPLATE-UUID\",\n  \"cookedBy\": \"USER-UUID\",\n  \"portionsCooked\": 50\n}"
+							"raw": "{\n  \"cookedBy\": \"USER-UUID\",\n  \"Used_BOMs\": [\n    {\n      \"templateId\": \"TEMPLATE-UUID-1\",\n      \"portionsCooked\": 50\n    },\n    {\n      \"templateId\": \"TEMPLATE-UUID-2\",\n      \"portionsCooked\": 25\n    },\n    {\n      \"templateId\": \"TEMPLATE-UUID-3\",\n      \"portionsCooked\": 75\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/bom-usage-logs/log",

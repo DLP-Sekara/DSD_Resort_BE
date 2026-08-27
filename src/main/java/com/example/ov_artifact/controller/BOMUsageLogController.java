@@ -20,9 +20,9 @@ public class BOMUsageLogController {
 
     @PostMapping("/log")
     public ResponseEntity<StandardResponse> logUsage(@RequestBody BOMUsageLogDTO dto) {
-        BOMUsageLogDTO savedLog = bomUsageLogService.logUsage(dto);
+        List<BOMUsageLogDTO> savedLogs = bomUsageLogService.logUsageBatch(dto);
         return new ResponseEntity<>(
-                new StandardResponse(true, 201, "BOM Usage Logged Successfully", savedLog),
+                new StandardResponse(true, 201, "BOM Usage Logged Successfully", savedLogs),
                 HttpStatus.CREATED);
     }
 
