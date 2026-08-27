@@ -534,6 +534,18 @@
 					}
 				},
 				{
+					"name": "Get Food Item by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/food-items/ITEM-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "food-items", "ITEM-UUID"]
+						}
+					}
+				},
+				{
 					"name": "Get All Food Items",
 					"request": {
 						"method": "GET",
@@ -646,6 +658,27 @@
 			"name": "8. BOM Template Management",
 			"item": [
 				{
+					"name": "Calculate Order BOM (Recipe & Stock Breakdown)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": \"46ef6395-bc5a-47e2-a3b8-465cbb6d5bc5\",\n  \"orderDetails\": [\n    {\n      \"itemId\": \"1d9fc849-232d-4e30-b1c5-8d99d119e496\",\n      \"orderedQty\": 2\n    },\n    {\n      \"itemId\": \"a6583917-d26d-4297-bbf3-d606347401f4\",\n      \"orderedQty\": 2\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/calculate-order-bom",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "calculate-order-bom"]
+						}
+					}
+				},
+				{
 					"name": "Create BOM Template",
 					"request": {
 						"method": "POST",
@@ -667,6 +700,27 @@
 					}
 				},
 				{
+					"name": "Update BOM Template",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"templateId\": \"TEMPLATE-UUID\",\n  \"templateName\": \"Chicken Biryani BOM Updated\",\n  \"itemId\": \"FOOD-ITEM-UUID\",\n  \"items\": [\n    {\n      \"materialId\": \"MATERIAL-UUID-1\",\n      \"qtyPerPerson\": 0.300\n    },\n    {\n      \"materialId\": \"MATERIAL-UUID-2\",\n      \"qtyPerPerson\": 0.350\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "update"]
+						}
+					}
+				},
+				{
 					"name": "Get BOM Template by ID",
 					"request": {
 						"method": "GET",
@@ -675,6 +729,18 @@
 							"raw": "{{baseUrl}}/api/v1/bom-templates/TEMPLATE-UUID",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "v1", "bom-templates", "TEMPLATE-UUID"]
+						}
+					}
+				},
+				{
+					"name": "Get BOM Template by Food Item ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/bom-templates/food-item/FOOD-ITEM-UUID",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "bom-templates", "food-item", "FOOD-ITEM-UUID"]
 						}
 					}
 				},

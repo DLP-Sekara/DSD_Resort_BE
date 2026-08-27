@@ -1,6 +1,8 @@
 package com.example.ov_artifact.controller;
 
 import com.example.ov_artifact.dto.BOMTemplateDTO;
+import com.example.ov_artifact.dto.OrderBOMCalculationRequestDTO;
+import com.example.ov_artifact.dto.OrderBOMCalculationResultDTO;
 import com.example.ov_artifact.services.BOMTemplateService;
 import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,22 @@ import java.util.List;
 public class BOMTemplateController {
 
     private final BOMTemplateService bomTemplateService;
+
+    @PostMapping("/calculate-order-bom")
+    public ResponseEntity<StandardResponse> calculateOrderBOM(@RequestBody OrderBOMCalculationRequestDTO requestDTO) {
+        List<OrderBOMCalculationResultDTO> results = bomTemplateService.calculateOrderBOM(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Calculation Completed Successfully", results),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/calculate")
+    public ResponseEntity<StandardResponse> calculateBOMAlias(@RequestBody OrderBOMCalculationRequestDTO requestDTO) {
+        List<OrderBOMCalculationResultDTO> results = bomTemplateService.calculateOrderBOM(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Calculation Completed Successfully", results),
+                HttpStatus.OK);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<StandardResponse> createTemplate(@RequestBody BOMTemplateDTO bomTemplateDTO) {

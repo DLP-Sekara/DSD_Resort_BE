@@ -2,23 +2,31 @@ package com.example.ov_artifact.services;
 
 import com.example.ov_artifact.dto.BOMTemplateDTO;
 import com.example.ov_artifact.dto.BOMTemplateItemDTO;
+import com.example.ov_artifact.dto.OrderBOMCalculationRequestDTO;
+import com.example.ov_artifact.dto.OrderBOMCalculationResultDTO;
+import com.example.ov_artifact.dto.OrderItemDetailDTO;
+import com.example.ov_artifact.dto.RawMaterialCalculationDetailDTO;
 import com.example.ov_artifact.entity.BOMTemplate;
 import com.example.ov_artifact.entity.BOMTemplateItem;
 import com.example.ov_artifact.entity.FoodItem;
 import com.example.ov_artifact.entity.RawMaterial;
+import com.example.ov_artifact.entity.RestaurantOrderDetail;
 import com.example.ov_artifact.entity.SystemUsers;
 import com.example.ov_artifact.repository.AuthRepo;
 import com.example.ov_artifact.repository.BOMTemplateItemRepository;
 import com.example.ov_artifact.repository.BOMTemplateRepository;
 import com.example.ov_artifact.repository.FoodItemRepository;
 import com.example.ov_artifact.repository.RawMaterialRepository;
+import com.example.ov_artifact.repository.RestaurantOrderDetailRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +39,7 @@ public class BOMTemplateService {
     private final AuthRepo authRepo;
     private final RawMaterialRepository rawMaterialRepository;
     private final FoodItemRepository foodItemRepository;
+    private final RestaurantOrderDetailRepository restaurantOrderDetailRepository;
 
     public BOMTemplateDTO createTemplate(BOMTemplateDTO dto) {
         if (dto.getItemId() == null || dto.getItemId().trim().isEmpty()) {
@@ -172,5 +181,82 @@ public class BOMTemplateService {
 
         dto.setItems(itemDTOs);
         return dto;
+    }
+
+    public List<OrderBOMCalculationResultDTO> calculateOrderBOM(OrderBOMCalculationRequestDTO request) {
+        List<OrderBOMCalculationResultDTO> resultList = new ArrayList<>();
+        if (request == null) {
+            return resultList;
+        }
+
+        List<OrderItemDetailDTO> details = request.getOrderDetails();
+        if ((details == null || details.isEmpty()) && request.getOrderId() != null && !request.getOrderId().trim().isEmpty()) {
+            List<RestaurantOrderDetail> dbDetails = restaurantOrderDetailRepository.findByRestaurantOrder_OrderId(request.getOrderId());
+            details = dbDetails.stream().map(d -> new OrderItemDetailDTO(
+                    d.getFoodItem() != null ? d.getFoodItem().getItemId() : null,
+                    d.getOrderedQty()
+            )).collect(Collectors.toList());
+        }
+
+        if (details == null || details.isEmpty()) {
+            return resultList;
+        }
+
+        for (OrderItemDetailDTO detail : details) {
+            if (detail.getItemId() == null || detail.getItemId().trim().isEmpty()) {
+                continue;
+            }
+
+            int orderedQty = (detail.getOrderedQty() != null && detail.getOrderedQty() > 0) ? detail.getOrderedQty() : 1;
+
+            Optional<FoodItem> foodItemOpt = foodItemRepository.findById(detail.getItemId());
+            String foodItemName = foodItemOpt.map(FoodItem::getName).orElse("Unknown Food Item");
+
+            OrderBOMCalculationResultDTO foodItemResult = new OrderBOMCalculationResultDTO();
+            foodItemResult.setItemId(detail.getItemId());
+            foodItemResult.setItemName(foodItemName);
+            foodItemResult.setRequiredQuantity(orderedQty);
+            foodItemResult.setRawMaterialDetails(new ArrayList<>());
+
+            Optional<BOMTemplate> bomTemplateOpt = bomTemplateRepository.findByFoodItem_ItemId(detail.getItemId());
+            if (bomTemplateOpt.isPresent()) {
+                BOMTemplate template = bomTemplateOpt.get();
+                List<BOMTemplateItem> templateItems = bomTemplateItemRepository.findByBomTemplate_TemplateId(template.getTemplateId());
+
+                for (BOMTemplateItem templateItem : templateItems) {
+                    RawMaterial rawMaterial = templateItem.getRawMaterial();
+                    if (rawMaterial == null) {
+                        continue;
+                    }
+
+                    BigDecimal qtyPerPerson = templateItem.getQtyPerPerson() != null ? templateItem.getQtyPerPerson() : BigDecimal.ZERO;
+                    BigDecimal totalRequired = qtyPerPerson.multiply(BigDecimal.valueOf(orderedQty));
+                    BigDecimal warehouseStock = rawMaterial.getQuantityOnHand() != null ? rawMaterial.getQuantityOnHand() : BigDecimal.ZERO;
+
+                    boolean isShortage = totalRequired.compareTo(warehouseStock) > 0;
+                    BigDecimal shortageQty = isShortage ? totalRequired.subtract(warehouseStock) : BigDecimal.ZERO;
+                    String status = isShortage ? "Shortage" : "In Stock";
+
+                    RawMaterialCalculationDetailDTO materialDTO = new RawMaterialCalculationDetailDTO();
+                    materialDTO.setMaterialId(rawMaterial.getMaterialId());
+                    materialDTO.setMaterialName(rawMaterial.getMaterialName());
+                    materialDTO.setCategory(rawMaterial.getCategory());
+                    materialDTO.setUnitOfMeasure(rawMaterial.getUnitOfMeasure());
+                    materialDTO.setQtyPerPerson(qtyPerPerson);
+                    materialDTO.setOrderedQty(orderedQty);
+                    materialDTO.setTotalRequiredQty(totalRequired);
+                    materialDTO.setQuantityOnHand(warehouseStock);
+                    materialDTO.setStatus(status);
+                    materialDTO.setIsShortage(isShortage);
+                    materialDTO.setShortageQty(shortageQty);
+
+                    foodItemResult.getRawMaterialDetails().add(materialDTO);
+                }
+            }
+
+            resultList.add(foodItemResult);
+        }
+
+        return resultList;
     }
 }
