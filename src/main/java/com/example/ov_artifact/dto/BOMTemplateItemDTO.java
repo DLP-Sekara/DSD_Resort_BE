@@ -13,5 +13,7 @@ public class BOMTemplateItemDTO {
     private String templateItemId;
     private String templateId;
     private String materialId;
+    private String materialName;
+    private String unitOfMeasure;
     private BigDecimal qtyPerPerson;
 }

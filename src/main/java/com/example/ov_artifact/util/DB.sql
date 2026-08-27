@@ -68,7 +68,7 @@ CREATE TABLE BOMTemplate (
     template_id INT AUTO_INCREMENT PRIMARY KEY,
     template_name VARCHAR(100) NOT NULL,
     created_by INT NOT NULL,
-    item_id INT NULL UNIQUE,
+    item_id INT NOT NULL UNIQUE,
     FOREIGN KEY (created_by) REFERENCES SystemUser(user_id),
     FOREIGN KEY (item_id) REFERENCES FoodItem(item_id)
 );

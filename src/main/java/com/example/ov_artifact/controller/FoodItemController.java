@@ -50,6 +50,14 @@ public class FoodItemController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StandardResponse> getFoodItemById(@PathVariable String id) {
+        FoodItemDTO foodItem = foodItemService.getFoodItemById(id);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "Food Item Fetched Successfully", foodItem),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllFoodItems() {
         List<FoodItemDTO> foodItems = foodItemService.getAllFoodItems();

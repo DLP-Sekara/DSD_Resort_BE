@@ -13,6 +13,8 @@ public class BOMTemplateDTO {
     private String templateId;
     private String templateName;
     private String createdBy;
+    private String creatorName;
     private String itemId;
+    private String itemName;
     private List<BOMTemplateItemDTO> items;
 }

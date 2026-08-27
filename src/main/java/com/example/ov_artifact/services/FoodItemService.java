@@ -1,7 +1,10 @@
 package com.example.ov_artifact.services;
 
 import com.example.ov_artifact.dto.FoodItemDTO;
+import com.example.ov_artifact.entity.BOMTemplateItem;
 import com.example.ov_artifact.entity.FoodItem;
+import com.example.ov_artifact.repository.BOMTemplateItemRepository;
+import com.example.ov_artifact.repository.BOMTemplateRepository;
 import com.example.ov_artifact.repository.FoodItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,8 @@ import java.util.List;
 public class FoodItemService {
 
     private final FoodItemRepository foodItemRepository;
+    private final BOMTemplateRepository bomTemplateRepository;
+    private final BOMTemplateItemRepository bomTemplateItemRepository;
     private final ModelMapper modelMapper;
 
     public void addFoodItem(FoodItemDTO foodItemDTO) {
@@ -44,10 +49,22 @@ public class FoodItemService {
 
     public void deleteFoodItem(String id) {
         if (foodItemRepository.existsById(id)) {
+            // Clean up any associated BOM Template and its items first to maintain referential integrity
+            bomTemplateRepository.findByFoodItem_ItemId(id).ifPresent(bom -> {
+                List<BOMTemplateItem> items = bomTemplateItemRepository.findByBomTemplate_TemplateId(bom.getTemplateId());
+                bomTemplateItemRepository.deleteAll(items);
+                bomTemplateRepository.delete(bom);
+            });
             foodItemRepository.deleteById(id);
         } else {
             throw new RuntimeException("Food Item not found for ID: " + id);
         }
+    }
+
+    public FoodItemDTO getFoodItemById(String id) {
+        FoodItem foodItem = foodItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Food Item not found for ID: " + id));
+        return modelMapper.map(foodItem, FoodItemDTO.class);
     }
 
     public List<FoodItemDTO> getAllFoodItems() {

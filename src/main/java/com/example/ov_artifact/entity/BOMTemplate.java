@@ -24,6 +24,6 @@ public class BOMTemplate {
     private SystemUsers createdBy;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", unique = true, columnDefinition = "varchar(36)")
+    @JoinColumn(name = "item_id", nullable = false, unique = true, columnDefinition = "varchar(36)")
     private FoodItem foodItem;
 }

@@ -26,6 +26,22 @@ public class BOMTemplateController {
                 HttpStatus.CREATED);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<StandardResponse> updateTemplate(@RequestBody BOMTemplateDTO bomTemplateDTO) {
+        BOMTemplateDTO updatedTemplate = bomTemplateService.updateTemplate(bomTemplateDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Template Updated Successfully", updatedTemplate),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/food-item/{foodItemId}")
+    public ResponseEntity<StandardResponse> getTemplateByFoodItemId(@PathVariable String foodItemId) {
+        BOMTemplateDTO template = bomTemplateService.getTemplateByFoodItemId(foodItemId);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "BOM Template Fetched Successfully for Food Item", template),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<StandardResponse> getTemplateById(@PathVariable String id) {
         BOMTemplateDTO template = bomTemplateService.getTemplateById(id);
