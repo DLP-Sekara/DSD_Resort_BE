@@ -6,6 +6,7 @@ import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class MealPlanController {
 
     private final MealPlanService mealPlanService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<StandardResponse> addMealPlan(@RequestBody MealPlanDTO mealPlanDTO) {
         mealPlanService.addMealPlan(mealPlanDTO);
@@ -34,6 +36,7 @@ public class MealPlanController {
                 HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<StandardResponse> updateMealPlan(@RequestBody MealPlanDTO mealPlanDTO) {
         mealPlanService.updateMealPlan(mealPlanDTO);
@@ -42,6 +45,7 @@ public class MealPlanController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<StandardResponse> deleteMealPlan(@PathVariable String id) {
         mealPlanService.deleteMealPlan(id);
@@ -50,6 +54,7 @@ public class MealPlanController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllMealPlans() {
         List<MealPlanDTO> mealPlans = mealPlanService.getAllMealPlans();

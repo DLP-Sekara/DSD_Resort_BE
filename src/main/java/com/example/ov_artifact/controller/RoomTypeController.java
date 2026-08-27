@@ -6,6 +6,7 @@ import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class RoomTypeController {
 
     private final RoomTypeService roomTypeService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<StandardResponse> addRoomType(@RequestBody RoomTypeDTO roomTypeDTO) {
         roomTypeService.addRoomType(roomTypeDTO);
@@ -34,6 +36,7 @@ public class RoomTypeController {
                 HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<StandardResponse> updateRoomType(@RequestBody RoomTypeDTO roomTypeDTO) {
         roomTypeService.updateRoomType(roomTypeDTO);
@@ -42,6 +45,7 @@ public class RoomTypeController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<StandardResponse> deleteRoomType(@PathVariable String id) {
         roomTypeService.deleteRoomType(id);
@@ -50,6 +54,7 @@ public class RoomTypeController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllRoomTypes() {
         List<RoomTypeDTO> roomTypes = roomTypeService.getAllRoomTypes();

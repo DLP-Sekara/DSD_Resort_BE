@@ -50,7 +50,7 @@ public class AuthService {
             throw new AccessDeniedException("Invalid Password!");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         AuthDTO responseDTO = modelMapper.map(user, AuthDTO.class);
         responseDTO.setPassword(null);

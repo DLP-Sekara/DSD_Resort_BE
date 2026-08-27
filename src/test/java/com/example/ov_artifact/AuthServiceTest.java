@@ -82,7 +82,7 @@ public class AuthServiceTest {
     void testLoginUser_Success() {
         when(authRepo.findByEmail(authDTO.getEmail())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(authDTO.getPassword(), user.getPassword())).thenReturn(true);
-        when(jwtUtil.generateToken(user.getEmail())).thenReturn("mocked-jwt-token");
+        when(jwtUtil.generateToken(user.getEmail(), user.getRole())).thenReturn("mocked-jwt-token");
         when(modelMapper.map(any(SystemUsers.class), eq(AuthDTO.class))).thenReturn(authDTO);
 
         AuthDTO result = authService.loginUser(authDTO);

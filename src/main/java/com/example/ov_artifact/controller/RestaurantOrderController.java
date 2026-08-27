@@ -6,6 +6,7 @@ import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class RestaurantOrderController {
 
     private final RestaurantOrderService restaurantOrderService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @PostMapping("/create")
     public ResponseEntity<StandardResponse> createOrder(@RequestBody RestaurantOrderDTO dto) {
         RestaurantOrderDTO createdOrder = restaurantOrderService.createOrder(dto);
@@ -26,6 +28,7 @@ public class RestaurantOrderController {
                 HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'HEAD_CHEF', 'CHEF')")
     @GetMapping("/{id}")
     public ResponseEntity<StandardResponse> getOrderById(@PathVariable String id) {
         RestaurantOrderDTO order = restaurantOrderService.getOrderById(id);
@@ -34,6 +37,7 @@ public class RestaurantOrderController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'HEAD_CHEF', 'CHEF')")
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllOrders(
             @RequestParam(required = false) Boolean isKitchenPrepared,
@@ -45,6 +49,7 @@ public class RestaurantOrderController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'HEAD_CHEF', 'CHEF')")
     @PutMapping("/update-status/{id}")
     public ResponseEntity<StandardResponse> updateOrderStatus(@PathVariable String id, @RequestParam String status) {
         restaurantOrderService.updateOrderStatus(id, status);
@@ -53,6 +58,7 @@ public class RestaurantOrderController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<StandardResponse> deleteOrder(@PathVariable String id) {
         restaurantOrderService.deleteOrder(id);

@@ -6,6 +6,7 @@ import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<StandardResponse> addRoom(@RequestBody RoomDTO roomDTO) {
         roomService.addRoom(roomDTO);
@@ -34,6 +36,7 @@ public class RoomController {
                 HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<StandardResponse> updateRoom(@RequestBody RoomDTO roomDTO) {
         roomService.updateRoom(roomDTO);
@@ -42,6 +45,7 @@ public class RoomController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<StandardResponse> deleteRoom(@PathVariable String id) {
         roomService.deleteRoom(id);
@@ -50,6 +54,7 @@ public class RoomController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllRooms() {
         List<RoomDTO> rooms = roomService.getAllRooms();
@@ -58,6 +63,7 @@ public class RoomController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @GetMapping("/get-by-id/{id}")
     public ResponseEntity<StandardResponse> getRoomById(@PathVariable String id) {
         RoomDTO roomDTO = roomService.getRoomById(id);

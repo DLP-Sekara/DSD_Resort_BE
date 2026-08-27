@@ -83,6 +83,7 @@ public class AuthController {
                 HttpStatus.OK);
     }
 
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-users")
     public ResponseEntity<StandardResponse> getAllSystemUsers() {
 
@@ -117,6 +118,7 @@ public class AuthController {
                 HttpStatus.OK);
     }
 
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     @PostMapping("/change-password")
     public ResponseEntity<StandardResponse> changePassword(@RequestBody ChangePasswordRequestDTO requestDTO) {
         String email = org.springframework.security.core.context.SecurityContextHolder
