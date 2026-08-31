@@ -41,4 +41,10 @@ public class WebAppConfig implements WebMvcConfigurer {
 
         return modelMapper;
     }
+
+    @Bean
+    public org.springframework.web.client.RestTemplate restTemplate() {
+        return new org.springframework.web.client.RestTemplate();
+    }
 }
+

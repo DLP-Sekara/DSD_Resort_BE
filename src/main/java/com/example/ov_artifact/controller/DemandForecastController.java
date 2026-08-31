@@ -1,6 +1,9 @@
 package com.example.ov_artifact.controller;
 
+import com.example.ov_artifact.dto.DemandDateContextResponseDTO;
 import com.example.ov_artifact.dto.DemandForecastDTO;
+import com.example.ov_artifact.dto.DemandForecastPredictionRequestDTO;
+import com.example.ov_artifact.dto.DemandForecastPredictionResponseDTO;
 import com.example.ov_artifact.services.DemandForecastService;
 import com.example.ov_artifact.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,24 @@ import java.util.List;
 public class DemandForecastController {
 
     private final DemandForecastService forecastService;
+
+    @GetMapping("/date-context")
+    public ResponseEntity<StandardResponse> getDateContext(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) String city) {
+        DemandDateContextResponseDTO dateContext = forecastService.getDateContext(date, city);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "Date Context Fetched Successfully", dateContext),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/predict")
+    public ResponseEntity<StandardResponse> predictDemand(@RequestBody DemandForecastPredictionRequestDTO requestDTO) {
+        DemandForecastPredictionResponseDTO prediction = forecastService.predictDemand(requestDTO);
+        return new ResponseEntity<>(
+                new StandardResponse(true, 200, "Demand Forecast Predicted Successfully", prediction),
+                HttpStatus.OK);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<StandardResponse> addForecast(@RequestBody DemandForecastDTO dto) {

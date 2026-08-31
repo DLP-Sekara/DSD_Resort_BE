@@ -966,6 +966,43 @@
 			"name": "11. Demand Forecast Management",
 			"item": [
 				{
+					"name": "Fetch Date Context (Sri Lanka Weather & Holiday)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/date-context?date=2026-09-10&city=Colombo,LK",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "date-context"],
+							"query": [
+								{ "key": "date", "value": "2026-09-10" },
+								{ "key": "city", "value": "Colombo,LK" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Predict Demand Forecast (ML Microservice)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"DayOfWeek\": 1,\n  \"IsWeekend\": 0,\n  \"IsHoliday\": 0,\n  \"Temperature\": 27,\n  \"Weather\": \"Clear\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/demand-forecasts/predict",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "demand-forecasts", "predict"]
+						}
+					}
+				},
+				{
 					"name": "Add Demand Forecast",
 					"request": {
 						"method": "POST",
