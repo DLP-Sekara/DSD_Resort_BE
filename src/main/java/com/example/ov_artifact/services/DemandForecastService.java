@@ -41,7 +41,7 @@ public class DemandForecastService {
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
 
-    @Value("${forecast.service.url:http://127.0.0.1:8000/api/v1/forecast/}")
+    @Value("${forecast.service.url}")
     private String forecastServiceUrl;
 
     @Value("${openweather.api.key:}")
@@ -49,6 +49,9 @@ public class DemandForecastService {
 
     @Value("${openweather.api.city:Colombo,LK}")
     private String defaultWeatherCity;
+
+    @Value("${calendarific.api.key}")
+    private String calendarificApiKey;
 
     private final Map<Integer, List<Map<String, Object>>> holidayCache = new ConcurrentHashMap<>();
 
@@ -83,7 +86,7 @@ public class DemandForecastService {
         try {
         List<Map<String, Object>> holidays = holidayCache.computeIfAbsent(year, y -> {
             try {
-                String apiKey = "BUZ32JohbZWMpUeBCvgs7WtrBjBwN3bJ";
+                String apiKey = calendarificApiKey;
                 String url = "https://calendarific.com/api/v2/holidays?api_key=" + apiKey + "&country=LK&year=" + y;
                 
                 ResponseEntity<Map> responseEntity = restTemplate.getForEntity(url, Map.class);
@@ -146,81 +149,99 @@ public class DemandForecastService {
 
     @SuppressWarnings("unchecked")
     private WeatherResult fetchWeather(LocalDate date, String city) {
-    
+        
+        // --- TEMPORARILY COMMENTED OUT OPENWEATHER API ---
+        /*
         if (openWeatherApiKey != null && !openWeatherApiKey.trim().isEmpty()) {
             try {
                 String encodedCity = city.replace(" ", "%20");
                 String owmUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + encodedCity + "&appid=" + openWeatherApiKey.trim() + "&units=metric";
                 Map<String, Object> root = restTemplate.getForObject(owmUrl, Map.class);
+                
                 if (root != null && root.containsKey("list")) {
                     List<Map<String, Object>> list = (List<Map<String, Object>>) root.get("list");
+                    
                     if (list != null && !list.isEmpty()) {
                         String targetDatePrefix = date.toString();
-                        Map<String, Object> matched = null;
+                        double totalTemp = 0.0;
+                        int count = 0;
+                        Map<String, Integer> weatherFrequency = new HashMap<>();
+                        String dominantWeatherMain = "Clear";
+                        String dominantWeatherDesc = "clear sky";
+
                         for (Map<String, Object> item : list) {
                             String dtTxt = (String) item.get("dt_txt");
                             if (dtTxt != null && dtTxt.startsWith(targetDatePrefix)) {
-                                if (dtTxt.contains("12:00") || matched == null) {
-                                    matched = item;
+                                Map<String, Object> mainMap = (Map<String, Object>) item.get("main");
+                                if (mainMap != null && mainMap.get("temp") != null) {
+                                    totalTemp += ((Number) mainMap.get("temp")).doubleValue();
+                                    count++;
+                                }
+        
+                                List<Map<String, Object>> weatherList = (List<Map<String, Object>>) item.get("weather");
+                                if (weatherList != null && !weatherList.isEmpty()) {
+                                    Map<String, Object> firstWeather = weatherList.get(0);
+                                    String main = (String) firstWeather.getOrDefault("main", "Clear");
+                                    String desc = (String) firstWeather.getOrDefault("description", "clear sky");
+                                    weatherFrequency.put(main + "|" + desc, weatherFrequency.getOrDefault(main + "|" + desc, 0) + 1);
                                 }
                             }
                         }
-                        if (matched == null) {
-                            matched = list.get(0);
-                        }
 
-                        Map<String, Object> mainMap = (Map<String, Object>) matched.get("main");
-                        double temp = 28.0;
-                        if (mainMap != null && mainMap.get("temp") != null) {
-                            temp = ((Number) mainMap.get("temp")).doubleValue();
+                        if (count > 0) {
+                            double avgTemp = Math.round((totalTemp / count) * 10.0) / 10.0;
+        
+                            int maxFreq = -1;
+                            for (Map.Entry<String, Integer> entry : weatherFrequency.entrySet()) {
+                                if (entry.getValue() > maxFreq) {
+                                    maxFreq = entry.getValue();
+                                    String[] parts = entry.getKey().split("\\|");
+                                    dominantWeatherMain = parts[0];
+                                    dominantWeatherDesc = parts[1];
+                                }
+                            }
+                            return new WeatherResult(avgTemp, classifyWeather(dominantWeatherMain, null), dominantWeatherDesc);
                         }
-
-                        List<Map<String, Object>> weatherList = (List<Map<String, Object>>) matched.get("weather");
-                        String main = "Clear";
-                        String desc = "clear sky";
-                        if (weatherList != null && !weatherList.isEmpty()) {
-                            Map<String, Object> firstWeather = weatherList.get(0);
-                            main = (String) firstWeather.getOrDefault("main", "Clear");
-                            desc = (String) firstWeather.getOrDefault("description", "clear sky");
-                        }
-                        return new WeatherResult(temp, classifyWeather(main, null), desc);
                     }
                 }
             } catch (Exception ex) {
                 // Fall through to Open-Meteo fallback
             }
         }
+        */
 
-        // 2. Open-Meteo Fallback (Free, No API Key required, Highly accurate for Sri Lanka)
+        // Default fallback result
+        WeatherResult result = new WeatherResult(28.0, "Clear", "Pleasant Tropical Weather");
+
+        // --- NEW DYNAMIC OPEN-METEO API ---
         try {
-            String omUrl = "https://api.open-meteo.com/v1/forecast?latitude=6.9271&longitude=79.8612&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FColombo";
+            String targetDateStr = date.toString();
+            String omUrl = "https://api.open-meteo.com/v1/forecast?latitude=6.0367&longitude=80.2170&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia/Colombo&start_date=" + targetDateStr + "&end_date=" + targetDateStr;
             Map<String, Object> root = restTemplate.getForObject(omUrl, Map.class);
+            
             if (root != null && root.containsKey("daily")) {
                 Map<String, Object> daily = (Map<String, Object>) root.get("daily");
-                List<String> timeList = (List<String>) daily.get("time");
                 List<Number> maxTempList = (List<Number>) daily.get("temperature_2m_max");
                 List<Number> minTempList = (List<Number>) daily.get("temperature_2m_min");
                 List<Number> codeList = (List<Number>) daily.get("weathercode");
 
-                if (timeList != null && maxTempList != null && minTempList != null && codeList != null) {
-                    String targetStr = date.toString();
-                    for (int i = 0; i < timeList.size(); i++) {
-                        if (targetStr.equals(timeList.get(i))) {
-                            double max = maxTempList.get(i).doubleValue();
-                            double min = minTempList.get(i).doubleValue();
-                            double avgTemp = Math.round(((max + min) / 2.0) * 10.0) / 10.0;
-                            int weatherCode = codeList.get(i).intValue();
-                            return new WeatherResult(avgTemp, classifyWeather(null, weatherCode), describeWeatherCode(weatherCode));
-                        }
-                    }
+                if (maxTempList != null && !maxTempList.isEmpty() && 
+                    minTempList != null && !minTempList.isEmpty() && 
+                    codeList != null && !codeList.isEmpty()) {
+                    
+                    double max = maxTempList.get(0) != null ? maxTempList.get(0).doubleValue() : 28.0;
+                    double min = minTempList.get(0) != null ? minTempList.get(0).doubleValue() : 28.0;
+                    double avgTemp = Math.round(((max + min) / 2.0) * 10.0) / 10.0;
+                    int weatherCode = codeList.get(0) != null ? codeList.get(0).intValue() : 0;
+                    
+                    result = new WeatherResult(avgTemp, classifyWeather(null, weatherCode), describeWeatherCode(weatherCode));
                 }
             }
         } catch (Exception ex) {
-            // Fall through to default tropical values
+            System.err.println("Open-Meteo API Error: " + ex.getMessage());
         }
 
-        // 3. Sensible tropical resort default
-        return new WeatherResult(28.0, "Clear", "Pleasant Tropical Weather");
+        return result;
     }
 
 
