@@ -1,11 +1,9 @@
 package com.example.ov_artifact.services;
 
 import com.example.ov_artifact.dto.DemandForecastDTO;
-import com.example.ov_artifact.entity.BOMTemplate;
 import com.example.ov_artifact.entity.DemandForecast;
 import com.example.ov_artifact.entity.SystemUsers;
 import com.example.ov_artifact.repository.AuthRepo;
-import com.example.ov_artifact.repository.BOMTemplateRepository;
 import com.example.ov_artifact.repository.DemandForecastRepository;
 
 import com.example.ov_artifact.dto.DemandDateContextResponseDTO;
@@ -23,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -36,7 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DemandForecastService {
 
     private final DemandForecastRepository forecastRepository;
-    private final BOMTemplateRepository bomTemplateRepository;
     private final AuthRepo authRepo;
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
@@ -355,16 +351,15 @@ public class DemandForecastService {
     }
 
     public DemandForecastDTO addForecast(DemandForecastDTO dto) {
-        BOMTemplate template = bomTemplateRepository.findById(dto.getTemplateId())
-                .orElseThrow(() -> new RuntimeException("BOMTemplate not found with ID: " + dto.getTemplateId()));
-
         SystemUsers createdBy = authRepo.findById(dto.getCreatedBy())
                 .orElseThrow(() -> new RuntimeException("SystemUser not found with ID: " + dto.getCreatedBy()));
 
         DemandForecast forecast = new DemandForecast();
-        forecast.setBomTemplate(template);
+        forecast.setTemplateId(dto.getTemplateId());
         forecast.setCreatedBy(createdBy);
         forecast.setTargetDate(dto.getTargetDate());
+        forecast.setDateDetails(dto.getDateDetails());
+        forecast.setTemperature(dto.getTemperature());
         forecast.setPredictedGuests(dto.getPredictedGuests());
         forecast.setWeatherFeature(dto.getWeatherFeature());
         forecast.setIsHoliday(dto.getIsHoliday());

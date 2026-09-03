@@ -115,15 +115,15 @@ CREATE TABLE BOMTemplateItem (
 );
 
 CREATE TABLE DemandForecast (
-    forecast_id INT AUTO_INCREMENT PRIMARY KEY,
-    template_id INT NOT NULL,
-    created_by INT NOT NULL,
+    forecast_id VARCHAR(36) PRIMARY KEY,
+    template_id TEXT NOT NULL,
+    created_by VARCHAR(36) NOT NULL,
     target_date DATE NOT NULL,
+    date_details VARCHAR(255),
+    temperature DECIMAL(5,2),
     predicted_guests INT NOT NULL,
     weather_feature VARCHAR(50),
-    is_holiday BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (template_id) REFERENCES BOMTemplate(template_id),
-    FOREIGN KEY (created_by) REFERENCES SystemUser(user_id)
+    is_holiday BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE BOMUsageLog (

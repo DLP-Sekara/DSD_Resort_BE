@@ -1014,7 +1014,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"templateId\": \"TEMPLATE-UUID\",\n  \"createdBy\": \"USER-UUID\",\n  \"targetDate\": \"2026-09-10\",\n  \"predictedGuests\": 120,\n  \"weatherFeature\": \"Sunny\",\n  \"isHoliday\": false\n}"
+							"raw": "{\n  \"templateId\": \"[{\\\"itemId\\\": 1, \\\"portions\\\": 25}, {\\\"itemId\\\": 2, \\\"portions\\\": 25}]\",\n  \"createdBy\": \"USER-UUID\",\n  \"targetDate\": \"2026-09-10\",\n  \"dateDetails\": \"Sunny and warm\",\n  \"temperature\": 32.5,\n  \"predictedGuests\": 120,\n  \"weatherFeature\": \"Sunny\",\n  \"isHoliday\": false\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/demand-forecasts/add",

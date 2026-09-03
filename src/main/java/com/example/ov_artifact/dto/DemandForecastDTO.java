@@ -14,6 +14,8 @@ public class DemandForecastDTO {
     private String templateId;
     private String createdBy;
     private LocalDate targetDate;
+    private String dateDetails;
+    private Double temperature;
     private Integer predictedGuests;
     private String weatherFeature;
     private Boolean isHoliday;

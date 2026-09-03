@@ -18,9 +18,8 @@ public class DemandForecast {
     @Column(name = "forecast_id", length = 36, nullable = false, updatable = false)
     private String forecastId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false, columnDefinition = "varchar(36)")
-    private BOMTemplate bomTemplate;
+    @Column(name = "template_id", columnDefinition = "TEXT", nullable = false)
+    private String templateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, columnDefinition = "varchar(36)")
@@ -28,6 +27,12 @@ public class DemandForecast {
 
     @Column(name = "target_date", nullable = false)
     private LocalDate targetDate;
+
+    @Column(name = "date_details")
+    private String dateDetails;
+
+    @Column(name = "temperature")
+    private Double temperature;
 
     @Column(name = "predicted_guests", nullable = false)
     private Integer predictedGuests;
