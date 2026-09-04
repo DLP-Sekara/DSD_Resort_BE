@@ -167,6 +167,10 @@ CREATE TABLE GuestReview (
     review_text TEXT NOT NULL,
     nlp_score DECIMAL(5, 2),
     sentiment_label VARCHAR(20),
+    star_rating INT,
+    food_items JSON,
+    staff_members JSON,
+    date_of_visit DATE,
     FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
     FOREIGN KEY (res_id) REFERENCES Reservation(res_id) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES RestaurantOrder(order_id) ON DELETE CASCADE

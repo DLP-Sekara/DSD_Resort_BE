@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import com.example.ov_artifact.util.StringListConverter;
 
 @Entity
 @Table(name = "GuestReview")
@@ -38,6 +41,20 @@ public class GuestReview {
 
     @Column(name = "sentiment_label", length = 20)
     private String sentimentLabel;
+
+    @Column(name = "star_rating")
+    private Integer starRating;
+
+    @Column(name = "food_items", columnDefinition = "json")
+    @Convert(converter = StringListConverter.class)
+    private List<String> foodItems;
+
+    @Column(name = "staff_members", columnDefinition = "json")
+    @Convert(converter = StringListConverter.class)
+    private List<String> staffMembers;
+
+    @Column(name = "date_of_visit")
+    private LocalDate dateOfVisit;
 
     private String reviewerName;
 }

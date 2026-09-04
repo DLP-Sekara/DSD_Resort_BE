@@ -18,5 +18,10 @@
     "name": "openweather.api.city",
     "type": "java.lang.String",
     "description": "A description for 'openweather.api.city'"
+  },
+  {
+    "name": "nlp.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'nlp.service.url'"
   }
 ]}

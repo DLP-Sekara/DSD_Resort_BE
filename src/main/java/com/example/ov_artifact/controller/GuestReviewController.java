@@ -15,7 +15,6 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/v1/guest-reviews")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class GuestReviewController {
 
     private final GuestReviewService guestReviewService;
@@ -28,6 +27,7 @@ public class GuestReviewController {
                 HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<StandardResponse> getReviewById(@PathVariable String id) {
         GuestReviewDTO review = guestReviewService.getReviewById(id);
@@ -36,6 +36,7 @@ public class GuestReviewController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/by-guest/{guestId}")
     public ResponseEntity<StandardResponse> getReviewsByGuest(@PathVariable String guestId) {
         List<GuestReviewDTO> reviews = guestReviewService.getReviewsByGuest(guestId);
@@ -44,6 +45,7 @@ public class GuestReviewController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<StandardResponse> getAllReviews() {
         List<GuestReviewDTO> reviews = guestReviewService.getAllReviews();
@@ -52,6 +54,7 @@ public class GuestReviewController {
                 HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<StandardResponse> deleteReview(@PathVariable String id) {
         guestReviewService.deleteReview(id);

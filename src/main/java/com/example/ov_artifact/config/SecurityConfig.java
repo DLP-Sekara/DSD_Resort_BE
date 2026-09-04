@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/v1/health").permitAll()
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/signup", "/api/v1/auth/forgot-password/**").permitAll()
+                        .requestMatchers("/api/v1/guest-reviews/add").permitAll()
                         .requestMatchers("/api/v1/auth/check-session").authenticated()
                         // .requestMatchers("/api/v1/rooms/**").hasRole("ADMIN")
                         // .requestMatchers("/api/v1/bookings/**").hasAnyRole("ADMIN", "SUPER_ADMIN")

@@ -1153,7 +1153,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"resId\": \"RES-UUID\",\n  \"orderId\": null,\n  \"reviewText\": \"Amazing stay and hospitality! The resort view was breathtaking.\",\n  \"nlpScore\": 4.85,\n  \"sentimentLabel\": \"POSITIVE\"\n}"
+							"raw": "{\n  \"guestId\": \"GUEST-UUID\",\n  \"resId\": \"RES-UUID\",\n  \"orderId\": null,\n  \"reviewText\": \"Amazing stay and hospitality! The resort view was breathtaking.\",\n  \"nlpScore\": null,\n  \"sentimentLabel\": null,\n  \"starRating\": 5,\n  \"date\": \"2026.08.25\",\n  \"food_items\": [\"Sea food Mix rice\"],\n  \"members\": [\"Nimal prasad\"]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/guest-reviews/add",

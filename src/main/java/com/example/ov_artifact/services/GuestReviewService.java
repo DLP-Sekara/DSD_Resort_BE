@@ -15,8 +15,17 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -28,26 +37,70 @@ public class GuestReviewService {
     private final ReservationRepository reservationRepository;
     private final RestaurantOrderRepository restaurantOrderRepository;
     private final ModelMapper modelMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${nlp.service.url:http://127.0.0.1:8000/api/v1/nlp/analyze}")
+    private String nlpServiceUrl;
 
     public GuestReviewDTO addReview(GuestReviewDTO dto) {
-        Guest guest = guestRepository.findById(dto.getGuestId())
-                .orElseThrow(() -> new RuntimeException("Guest not found with ID: " + dto.getGuestId()));
-
         GuestReview review = new GuestReview();
-        review.setGuest(guest);
-        review.setReviewText(dto.getReviewText());
-        review.setNlpScore(dto.getNlpScore());
-        review.setSentimentLabel(dto.getSentimentLabel());
+        Guest guest = null;
 
-        if (dto.getResId() != null && !dto.getResId().isEmpty()) {
+        if (dto.getResId() != null && !dto.getResId().trim().isEmpty() && !dto.getResId().equalsIgnoreCase("null")) {
             Reservation reservation = reservationRepository.findById(dto.getResId()).orElse(null);
             review.setReservation(reservation);
+            if (reservation != null) {
+                guest = reservation.getGuest();
+            }
         }
 
-        if (dto.getOrderId() != null && !dto.getOrderId().isEmpty()) {
+        if (dto.getOrderId() != null && !dto.getOrderId().trim().isEmpty() && !dto.getOrderId().equalsIgnoreCase("null")) {
             RestaurantOrder order = restaurantOrderRepository.findById(dto.getOrderId()).orElse(null);
             review.setRestaurantOrder(order);
+            if (guest == null && order != null) {
+                guest = order.getGuest();
+            }
         }
+
+        review.setGuest(guest);
+        review.setReviewText(dto.getReviewText());
+        review.setStarRating(dto.getStarRating());
+        review.setFoodItems(dto.getFoodItems());
+        review.setStaffMembers(dto.getStaffMembers());
+        review.setDateOfVisit(dto.getDateOfVisit());
+
+        // Call NLP API to get sentiment and score
+        if (dto.getReviewText() != null && !dto.getReviewText().isEmpty()) {
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                
+                Map<String, String> requestBody = new HashMap<>();
+                requestBody.put("review_text", dto.getReviewText());
+                
+                HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
+                ResponseEntity<Map> response = restTemplate.postForEntity(nlpServiceUrl, request, Map.class);
+                
+                if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                    Map<String, Object> body = response.getBody();
+                    if (body.get("sentiment_label") != null) {
+                        review.setSentimentLabel(body.get("sentiment_label").toString());
+                    }
+                    if (body.get("confidence_score") != null) {
+                        review.setNlpScore(new BigDecimal(body.get("confidence_score").toString()));
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to call NLP service: " + e.getMessage());
+                review.setNlpScore(dto.getNlpScore());
+                review.setSentimentLabel(dto.getSentimentLabel());
+            }
+        } else {
+            review.setNlpScore(dto.getNlpScore());
+            review.setSentimentLabel(dto.getSentimentLabel());
+        }
+
+
 
         GuestReview savedReview = reviewRepository.save(review);
         return modelMapper.map(savedReview, GuestReviewDTO.class);
