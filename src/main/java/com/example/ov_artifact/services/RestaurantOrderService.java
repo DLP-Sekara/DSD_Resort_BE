@@ -134,6 +134,13 @@ public class RestaurantOrderService {
         if (!orderRepository.existsById(orderId)) {
             throw new RuntimeException("Restaurant Order not found with ID: " + orderId);
         }
+
+        // Delete associated order details to prevent foreign key constraint violations
+        List<RestaurantOrderDetail> orderDetails = orderDetailRepository.findByRestaurantOrder_OrderId(orderId);
+        if (orderDetails != null && !orderDetails.isEmpty()) {
+            orderDetailRepository.deleteAll(orderDetails);
+        }
+
         orderRepository.deleteById(orderId);
     }
 }

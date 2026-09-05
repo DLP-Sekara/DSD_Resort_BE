@@ -5,7 +5,6 @@ import com.example.ov_artifact.entity.Guest;
 import com.example.ov_artifact.entity.GuestReview;
 import com.example.ov_artifact.entity.Reservation;
 import com.example.ov_artifact.entity.RestaurantOrder;
-import com.example.ov_artifact.repository.GuestRepository;
 import com.example.ov_artifact.repository.GuestReviewRepository;
 import com.example.ov_artifact.repository.ReservationRepository;
 import com.example.ov_artifact.repository.RestaurantOrderRepository;
