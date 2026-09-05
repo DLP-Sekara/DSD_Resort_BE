@@ -17,6 +17,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,10 +34,10 @@ import java.util.Map;
 public class GuestReviewService {
 
     private final GuestReviewRepository reviewRepository;
-    private final GuestRepository guestRepository;
     private final ReservationRepository reservationRepository;
     private final RestaurantOrderRepository restaurantOrderRepository;
     private final ModelMapper modelMapper;
+    private final SimpMessagingTemplate messagingTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${nlp.service.url:http://127.0.0.1:8000/api/v1/nlp/analyze}")
@@ -103,6 +104,7 @@ public class GuestReviewService {
 
 
         GuestReview savedReview = reviewRepository.save(review);
+        messagingTemplate.convertAndSend("/topic/reviews", savedReview);
         return modelMapper.map(savedReview, GuestReviewDTO.class);
     }
 

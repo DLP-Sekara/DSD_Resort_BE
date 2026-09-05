@@ -15,6 +15,8 @@ import com.example.ov_artifact.repository.RestaurantOrderRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -32,6 +34,7 @@ public class RestaurantOrderService {
     private final GuestRepository guestRepository;
     private final AuthRepo authRepo;
     private final FoodItemRepository foodItemRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     public RestaurantOrderDTO createOrder(RestaurantOrderDTO dto) {
@@ -70,7 +73,7 @@ public class RestaurantOrderService {
 
         savedOrder.setTotalAmount(totalAmount);
         orderRepository.save(savedOrder);
-
+        messagingTemplate.convertAndSend("/topic/orders", savedOrder);
         return getOrderById(savedOrder.getOrderId());
     }
 
