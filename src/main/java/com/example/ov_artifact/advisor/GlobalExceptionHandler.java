@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -53,5 +54,19 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    
+    // 6. Data Integrity Violation (e.g., Foreign Key Constraint failure)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        String message = "Cannot delete or update this record because it is referenced by other records.";
+        
+        // Make it slightly more specific if it's a foreign key constraint
+        if (e.getMostSpecificCause() != null && e.getMostSpecificCause().getMessage() != null && 
+            e.getMostSpecificCause().getMessage().contains("foreign key constraint fails")) {
+             message = "This record cannot be deleted as it is associated with other data (e.g. reservations). Please remove associated data first.";
+        }
+        
+        return new ResponseEntity<>(
+                new StandardResponse(false, 400, message, null),
+                HttpStatus.BAD_REQUEST);
+    }
 }
