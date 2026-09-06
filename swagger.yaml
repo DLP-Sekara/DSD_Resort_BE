@@ -1,0 +1,309 @@
+openapi: 3.0.0
+info:
+  title: DSD Resort API Collection
+  version: 1.0.0
+  description: Complete OpenAPI Collection for DSD Resort Admin Backend System organized by feature modules.
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+paths:
+  /api/v1/auth/signup:
+    post:
+      summary: User Signup
+      tags:
+        - 1. Authentication Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+                role: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/auth/login:
+    post:
+      summary: User Login
+      tags:
+        - 1. Authentication Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/auth/check-session:
+    get:
+      summary: Check Session
+      tags:
+        - 1. Authentication Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/guests/add:
+    post:
+      summary: Add Guest
+      tags:
+        - 2. Guest Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                phone: { type: string }
+                nic: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/guests/all:
+    get:
+      summary: Get All Guests
+      tags:
+        - 2. Guest Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/rooms/add:
+    post:
+      summary: Add Room
+      tags:
+        - 4. Room Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomNumber: { type: string }
+                typeId: { type: string }
+                status: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/rooms/all:
+    get:
+      summary: Get All Rooms
+      tags:
+        - 4. Room Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/meal-plans/add:
+    post:
+      summary: Add Meal Plan
+      tags:
+        - 5. Meal Plan Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                price: { type: integer }
+                planCode: { type: string }
+                status: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/meal-plans/all:
+    get:
+      summary: Get All Meal Plans
+      tags:
+        - 5. Meal Plan Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/food-items/all:
+    get:
+      summary: Get All Food Items
+      tags:
+        - 6. Food Item Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/raw-materials/all:
+    get:
+      summary: Get All Raw Materials
+      tags:
+        - 7. Raw Material Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/bom-templates/calculate-order-bom:
+    post:
+      summary: Calculate Order BOM (Recipe & Stock Breakdown)
+      tags:
+        - 8. BOM Template Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/reservations/create:
+    post:
+      summary: Create Reservation
+      tags:
+        - 9. Reservation Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                guestId: { type: string }
+                roomId: { type: string }
+                planId: { type: string }
+                handledBy: { type: string }
+                checkIn: { type: string }
+                checkOut: { type: string }
+                guestCount: { type: integer }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/reservations/all:
+    get:
+      summary: Get All Reservations (Filtered & Paginated)
+      tags:
+        - 9. Reservation Management
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+        - name: size
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/restaurant-orders/create:
+    post:
+      summary: Create Restaurant Order
+      tags:
+        - 10. Restaurant Order Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                handledBy: { type: string }
+                status: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/restaurant-orders/all:
+    get:
+      summary: Get All Restaurant Orders
+      tags:
+        - 10. Restaurant Order Management
+      parameters:
+        - name: isKitchenPrepared
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/demand-forecasts/predict:
+    post:
+      summary: Predict Demand Forecast (ML Microservice)
+      tags:
+        - 11. Demand Forecast Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                DayOfWeek: { type: integer }
+                IsWeekend: { type: integer }
+                IsHoliday: { type: integer }
+                Temperature: { type: integer }
+                Weather: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/demand-forecasts/all:
+    get:
+      summary: Get All Demand Forecasts
+      tags:
+        - 11. Demand Forecast Management
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/bom-usage-logs/log:
+    post:
+      summary: Log Kitchen BOM Usage (Batch)
+      tags:
+        - 12. BOM Usage Log Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cookedBy: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/guest-reviews/add:
+    post:
+      summary: Add Guest Review
+      tags:
+        - 13. Guest Review Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                guestId: { type: string }
+                resId: { type: string }
+                reviewText: { type: string }
+                nlpScore: { type: number }
+                sentimentLabel: { type: string }
+      responses:
+        "200":
+          description: Successful response
+  /api/v1/health:
+    get:
+      summary: Health Check
+      tags:
+        - 14. Health Check
+      responses:
+        "200":
+          description: Successful response
